@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', appstart)
 
-const notes = []
+let notes = []
 
 function appstart(){
     const newNoteSubmit = document.querySelector('#newNoteSubmit')
@@ -11,6 +11,16 @@ function addNewNote() {
     const title = document.querySelector('#newNoteName').value
     const content = document.querySelector('#newNoteContent').value
     if(title || content){
-        
+        notes.push(note)
+        updateLocalStorage()
+        addNoteToNotesContainer(note)
     }
+}
+
+function addNoteToNotesContainer(note){
+    const noteDateTime = new Date(note.id)
+    let noteDiv = document.createElement('#note')
+    noteDiv.classList.add(note)
+    noteDiv.innerHTML = '\
+    '
 }

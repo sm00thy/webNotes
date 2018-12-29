@@ -2,7 +2,7 @@ document.addEventListener('DOMContentLoaded', appstart)
 
 let notes = []
 
-function appstart(){
+function appStart(){
     const newNoteSubmit = document.querySelector('#newNoteSubmit')
     newNoteSubmit.addEventListener('click', addNewNote)
 }

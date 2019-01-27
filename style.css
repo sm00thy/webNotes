@@ -1,0 +1,35 @@
+body {
+    background: #2B303A;
+}
+
+.note{
+    background: #CCD3C9;
+    min-width: 100px;
+    min-height: 100px;
+    position: absolute;
+    left: 0;
+    top: 0;
+    box-shadow: 2px 2px 4px darkolivegreen;
+    padding-top: 20px;
+}
+
+.note textarea {
+    box-sizing: border-box;
+    min-width: 100px;
+    min-height: 100px;
+    background: transparent;
+    border: none;
+}
+
+.title {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 20px;
+    width: 100%;
+    background: #0C7C59;
+}
+
+.title:hover {
+    cursor: move;
+}

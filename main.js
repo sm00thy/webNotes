@@ -6,7 +6,7 @@ function appStart(){
     newNoteSubmit.addEventListener('click', addNewNote)
     notes = JSON.parse(localStorage.getItem('notes')) || []
     notes.forEach(note => {
-    addNotesToContainer(note)
+        addNotesToContainer(note)
     })
 }
 
@@ -14,6 +14,7 @@ function addNewNote() {
     const title = document.querySelector('#newNoteName').value
     const content = document.querySelector('#newNoteContent').value
     if(title || content){
+        const note = new note(title, content)
         notes.push(note)
         updateLocalStorage()
         addNoteToNotesContainer(note)
@@ -22,7 +23,7 @@ function addNewNote() {
 
 function addNoteToNotesContainer(note){
     const noteDateTime = new Date(note.id)
-    let noteDiv = document.createElement('#note')
+    let noteDiv = document.createElement('div')
     noteDiv.classList.add(note)
     noteDiv.innerHTML = `<div class="note-title">${note.title}</div>
     <div class="note-content">${note.content}</div>
@@ -35,8 +36,10 @@ function updateLocalStorage(){
     localStorage.setItem('notes', JSON.stringify(notes))
 }
 
-function note(title = '', content = ''){
-    this.title = title
-    this.content = content
-    this.id = Date.now()
+class note {
+    constructor(title = '', content = '') {
+        this.title = title;
+        this.content = content;
+        this.id = Date.now();
+    }
 }

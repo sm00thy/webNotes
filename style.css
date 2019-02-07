@@ -19,6 +19,7 @@ body {
     min-height: 100px;
     background: transparent;
     border: none;
+    font-size: 10px;
 }
 
 .title {

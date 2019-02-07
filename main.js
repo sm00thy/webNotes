@@ -10,11 +10,51 @@ function appStart(){
     })
 }
 
+(function() {
+    let drag, onDragStart, onDrag, onDragEnd,
+    pointX, pointY, addNoteButton;
+    
+    onDragStart = function(e) {
+        if(e.target.className.indexOf('title') === -1) {
+            return;
+        }
+        drag = this;
+        
+        let movingNote = drag.getBoundingClientRect();
+        pointX = movingNote.left - e.clientX;
+        pointY = movingNote.top - e.clientY;
+    }
+    
+    onDrag = function(e) {
+        if(!drag) {
+            return;
+        }
+        let posX = e.clientX + pointX, posY = e.clientY + pointY;
+        drag.style.transform = "translateX(" + posX +
+         "px) translateY(" + posY + "px)";
+    };
+
+    onDragEnd = function() {
+        drag = null;
+        pointX = null;
+        pointY = null;
+    }
+    document.addEventListener('mousemove', onDrag, false);
+    document.querySelector('.note').addEventListener('mousedown', onDragStart, false)
+    document.addEventListener('mouseup', onDragEnd)
+    addNewNote();
+
+    addNoteButton = document.querySelector('#newNoteSubmit');
+    addNoteButton.addEventListener('click', addNewNote);
+})();
+    
 function addNewNote() {
-    const title = document.querySelector('#newNoteName').value
-    const content = document.querySelector('#newNoteContent').value
+    const title = document.createElement('div'),
+        content = document.createElement('div'),
+        textArea = document.createElement('textarea');
+    
     if(title || content){
-        const note = new note(title, content)
+        const note = new Note(title, content)
         notes.push(note)
         updateLocalStorage()
         addNoteToNotesContainer(note)
@@ -28,7 +68,7 @@ function addNoteToNotesContainer(note){
     noteDiv.innerHTML = `<div class="note-title">${note.title}</div>
     <div class="note-content">${note.content}</div>
     <div class="note-datetime">${noteDateTime.content}</div>`
-    const nodesContainer = document.querySelector("#notesContainer")
+    const nodesContainer = document.querySelector("body")
     nodesContainer.appendChild(noteDiv)
 }
 
@@ -36,10 +76,8 @@ function updateLocalStorage(){
     localStorage.setItem('notes', JSON.stringify(notes))
 }
 
-class note {
-    constructor(title = '', content = '') {
-        this.title = title;
-        this.content = content;
-        this.id = Date.now();
-    }
+function Note(title = "", content = ""){
+    this.title = title;
+    this.content = content;
+    this.id = Date.now()
 }

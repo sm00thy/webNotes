@@ -1,19 +1,24 @@
 document.addEventListener('DOMContentLoaded', appStart)
 let notes = []
-
+//after page padge load, on start
 function appStart(){
     addNewNote();
     const newNoteSubmit = document.querySelector('#newNoteSubmit')
     newNoteSubmit.addEventListener('click', addNewNote)
     notes = JSON.parse(localStorage.getItem('notes')) || []
+    getNotesFromStorage(notes);
+}
+//get notes from storage
+function getNotesFromStorage(notes)
+{
     notes.forEach(note => {
         addNotesToContainer(note)
         console.log(localStorage.key(0));
-    })
+    });
 }
 
 let drag, pointX, pointY;
-
+//move notes when mouse down
 function onDragStart(e) {
     if(e.target.className.indexOf('dateArea') === -1) {
         return;
@@ -24,7 +29,7 @@ function onDragStart(e) {
     pointX = movingNote.left - e.clientX;
     pointY = movingNote.top - e.clientY;
 }
-
+//while is moving
 function onDrag(e) {
     if(!drag) {
         return;
@@ -34,6 +39,7 @@ function onDrag(e) {
     "px) translateY(" + posY + "px)";
 };
 
+//when release the button
 function onDragEnd() {
     drag = null;
     pointX = null;
@@ -43,24 +49,30 @@ function onDragEnd() {
 document.addEventListener('mousemove', onDrag, false);
 document.addEventListener('mouseup', onDragEnd, false);
 
+//create new note and push it to local storage
 function addNewNote() {
-    const area = document.createElement('div'),
+    let area = document.createElement('div'),
         bar = document.createElement('div'),
         title = document.createElement('div'),
         changeColorButton = document.createElement('button'),
         textArea = document.createElement('textarea');
 
-    title.setAttribute('contenteditable', "true");
+        note = new Note(area, bar, title, textArea, changeColorButton);
+        notes.push(note)
+ //       updateLocalStorage()
 
-    let note = new Note(area, bar, title, textArea, changeColorButton);
-    notes.push(note)
-//    updateLocalStorage()
+        title.setAttribute('contenteditable', "true");
 
-    addNotesToContainer(note);
-    note.bar.addEventListener('mousedown', onDragStart);
-    note.area.addEventListener('mousedown', onDragStart);
-}
+        addNotesToContainer(note);
+        note.bar.addEventListener('mousedown', onDragStart);
+        note.area.addEventListener('mousedown', onDragStart);
+    }
+    
+// function getNoteToSaveLocal(note){
+//         let textContent = note.querySelector('textarea')
+// }
 
+//fill note with data and create appearance
 function addNotesToContainer(note){
     const dateArea = document.createElement('div');
     dateArea.classList.add('dateArea');
@@ -79,7 +91,7 @@ function addNotesToContainer(note){
      noteDate(note.id) + '</div><div class="editableBar" contenteditable="true"'+
      'placeholder="Title"></div>';
 }
-
+//date on creation time
 function noteDate(noteId) {
     const date = new Date(noteId);
     const noteDateTime = date.getHours() + ":" +
@@ -90,9 +102,10 @@ function noteDate(noteId) {
 }
 
 function updateLocalStorage(){
-    localStorage.setItem('notes', JSON.stringify(notes));
+    localStorage.setItem('notes', JSON.stringify(note));
 }
 
+//note constructor
 function Note(area, bar, title, textArea, changeColorButton){
     this.area = area;
     this.bar = bar;
